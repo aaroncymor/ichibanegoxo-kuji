@@ -22,4 +22,8 @@ def kuji_detail(request, pk,  *args, **kwargs):
         "summary": summary,
         "claimed_raffles": claimed_raffles
     }
-    return render(request, "kuji/detail.html", ctx)
+    return render(request, "kuji/detail_old.html", ctx)
+
+
+def kuji_detail_new(request, *args, **kwargs):
+    return render(request, "kuji/detail.html", {})
