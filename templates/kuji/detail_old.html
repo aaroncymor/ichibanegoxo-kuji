@@ -1,45 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if summary %}
-<div id="kuji-session-detail">
-  <div hx-ws:connect="/ws/kuji-session/{{ summary.id }}/">
-    <h2>{{ summary.session_title }}</h2>
-    <p>{{ summary.cost_per_draw }}</p>
-    <div class="flex flex-row gap-2">
-      <span>Total: {{ summary.total }}</span>
-      <span id="unclaimed-total">Unclaimed: {{ summary.unclaimed_total }}</span>
-    </div>
+    {% if summary %}
+        <div id="kuji-session-detail">
+            <div hx-ws:connect="/ws/kuji-session/{{ summary.id }}/">
+                <h2>{{ summary.session_title }}</h2>
+                <p>{{ summary.cost_per_draw }}</p>
+                <div class="flex flex-row gap-2">
+                    <span>Total: {{ summary.total }}</span>
+                    <span id="unclaimed-total">Unclaimed: {{ summary.unclaimed_total }}</span>
+                </div>
 
-    <h3>Prizes</h3>
-    <ul id="raffles-summary" class="list-style-none">
-      {% for raffle in summary.raffles %}
-      <li>[{{ raffle.tier }}] - {{ raffle.name }} (Unclaimed: {{ raffle.unclaimed_count }})</li>
-      {% empty %}
-      <li>No raffles found in this session</li>
-      {% endfor %}
-    </ul>
+                <h3>Prizes</h3>
+                <ul id="raffles-summary" class="list-style-none">
+                    {% for raffle in summary.raffles %}
+                        <li>[{{ raffle.tier }}] - {{ raffle.name }} (Unclaimed: {{ raffle.unclaimed_count }})</li>
+                    {% empty %}
+                        <li>No raffles found in this session</li>
+                    {% endfor %}
+                </ul>
 
-    <form hx-ws:send class="flex flex-row gap-2">
-      <input type="hidden" name="user_id" value="AARONCYMOR" />
-      <button type="submit" name="draw_count" value="1" class="bg-blue-500 cursor-pointer">Draw 1 x
-        Ticket</button>
-      <button type="submit" name="draw_count" value="3" class="bg-green-500 cursor-pointer">Draw 3 x
-        Ticket</button>
-      <button type="submit" name="draw_count" value="5" class="bg-stone-500 cursor-pointer">Draw 5 x
-        Ticket</button>
-      <button type="submit" name="draw_count" value="10" class="bg-yellow-500 cursor-pointer">Draw 10 x
-        Ticket</button>
-    </form>
+                <form hx-ws:send class="flex flex-row gap-2">
+                    <input type="hidden" name="user_id" value="AARONCYMOR" />
+                    <button type="submit" name="draw_count" value="1" class="bg-blue-500 cursor-pointer">Draw 1 x
+                        Ticket</button>
+                    <button type="submit" name="draw_count" value="3" class="bg-green-500 cursor-pointer">Draw 3 x
+                        Ticket</button>
+                    <button type="submit" name="draw_count" value="5" class="bg-stone-500 cursor-pointer">Draw 5 x
+                        Ticket</button>
+                    <button type="submit" name="draw_count" value="10" class="bg-yellow-500 cursor-pointer">Draw 10 x
+                        Ticket</button>
+                </form>
 
-    <ul id="draw-results">
-      {% for raffle in claimed_raffles %}
-      <li>[{{ raffle.tier }}] - {{ raffle.name }}</li>
-      {% empty %}
-      <li>No raffles claimed yet</li>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-{% endif %}
+                <ul id="draw-results">
+                    {% for raffle in claimed_raffles %}
+                        <li>[{{ raffle.tier }}] - {{ raffle.name }}</li>
+                    {% empty %}
+                        <li>No raffles claimed yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

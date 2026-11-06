@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-full pb-16 pt-2">
+    <div class="max-w-[1520px] mx-auto px-4 lg:px-6">
+        <!-- Subheader & Live Spectator Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs border-b border-slate-800/80 pb-3 mb-5">
+            <div class="flex items-center gap-2 font-mono text-[11px] text-slate-400">
+                <span class="text-amber-400 font-semibold tracking-wide">ARENA LIVE</span>
+                <span>&gt;</span>
+                <span class="text-slate-300">Hubbyte Store PH</span>
+                <span>&gt;</span>
+                <span class="text-slate-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/30">
+                    One Piece Ichiban Kuji
+                </span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div
+                class="flex items-center gap-1.5 bg-[#141b2a] border border-rose-500/30 px-3 py-1 rounded-full text-[11px] font-mono text-rose-300">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block"></span>
+                <span>ROOM LIVE (12 SPECTATING)</span>
+            </div>
+            <div
+                class="flex items-center gap-1.5 bg-[#141b2a] border border-slate-700/60 px-3 py-1 rounded-full text-[11px] fon-mono text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-clock preview-icon w-3.5 h-3.5 text-slate-400">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                </svg>
+                <span>Box Reset in 12 min</span>
+            </div>
+        </div>
+
+        <!-- Top Hero Grid: Left Box Info + Right Last One Showcase -->
+        <div
+            class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#0e1422] border border-slate-800/90 rounded-2xl p-5 lg:p-7 mb-7 shadow-xl">
+
+            <!-- Left Hero Content -->
+            {% include 'kuji/arena/topherogrid_left.html' %}
+
+            <!-- Right Hero: Last One Prize Vitrine Showcase-->
+            {% include 'kuji/arena/topherogrid_right.html' %}
+
+        </div>
+
+        <!-- Main Content Grid: Stock Board (Left) & Snipe/Draw Terminals (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left Column: Live Prize Stock Board -->
+            {% include 'kuji/arena/live_prize_stock_board.html' %}
+
+            <!-- Right Column: Last One Snipe Terminal + Standard Draw + Live Feed * /-->
+            <div class="lg:col-span-5 space-y-5">
+
+                <!-- 1. LAST ONE SNIPE TERMINAL -->
+                {% include 'kuji/arena/snipe_terminal.html' %}
+
+                <!-- 2. STANDARD TICKET DRAW TERMINAL -->
+                {% include 'kuji/arena/ticket_draw_terminal.html' %}
+
+                <!-- 3. LIVE DRAW FEED (Instant Chain Sync) -->
+                {% include 'kuji/arena/live_draw_feed.html' %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
