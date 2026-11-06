@@ -25,5 +25,16 @@ def kuji_detail(request, pk,  *args, **kwargs):
     return render(request, "kuji/detail_old.html", ctx)
 
 
-def kuji_detail_new(request, *args, **kwargs):
-    return render(request, "kuji/detail.html", {})
+def kuji_detail_new(request, pk, *args, **kwargs):
+    kuji_session = KujiSession.objects.filter(pk=pk).first()
+    claimed_raffles = kuji_session.raffles.filter(claimed=True).values('id', 'name', 'tier')
+    summary = summarize_kuji_session(kuji_session)
+    ctx = {
+        "summary": summary,
+        "claimed_raffles": claimed_raffles
+    }
+    return render(request, "kuji/arena.html", ctx)
+
+
+def marketplace(request, *args, **kwargs):
+    return render(request, "kuji/marketplace.html", {})
