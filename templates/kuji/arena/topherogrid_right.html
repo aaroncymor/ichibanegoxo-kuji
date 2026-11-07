@@ -23,13 +23,13 @@
     <!-- Vitrine Image Display -->
     <div
         class="relative w-full h-56 sm:h-64 rounded-lg bg-black/60 overflow-hidden border border-slate-800 flex items-center justify-cenber">
-        <img src="https://via.placeholder.com/400x176/1a1a1a/666666?text=Last+One+Prize" alt="Last One Prize"
-            referrerPolicy="no-referrer"
+        {% if summary.last_prize and summary.last_prize.image_url %}
+        <img src="{{ summary.last_prize.image_url }}" alt="{{ summary.last_prize.name }}" referrerPolicy="no-referrer"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80">
         </div>
 
-        <!-- Badges on Bottom of Image -->
+        <!-- TODO: Badges on Bottom of Image -->
         <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] font-mono font-bold">
             <span
                 class="bg-slate-950/80 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded backdrop-blur-sm">
@@ -39,12 +39,19 @@
                 LED AMBIENT BASE INCLUDED
             </span>
         </div>
+        {% else %}
+        <img src="https://via.placeholder.com/400x176/1a1a1a/666666?text=Last+One+Prize" alt="Last One Prize"
+            referrerPolicy="no-referrer"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80">
+        </div>
+        {% endif %}
     </div>
 
     <!-- Figurine Title & Bottom Tag-->
     <div class="mt-3">
         <h3 class="text-sm sm:text-base font-display font-bold text-white leading-snug line-clamp-2">
-            Gear 5th Luffy Figure 1/7 Scale
+            {{ summary.last_prize.name }}
         </h3>
 
         <div

@@ -13,7 +13,7 @@
     </div>
 
     <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
-        {% for prize in claimed_raffles %}
+        {% for prize in claimed_prizes %}
         <div
             class="p-2.5 rounded-lg bg-[#121826] border border-slate-800/80 flex items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2.5">
@@ -23,17 +23,15 @@
                 </div>
                 <div>
                     <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                        <span>User @aaroncymor</span>
+                        <span>User @{{ prize.user_id }}</span>
                         <span class="text-[10px] font-normal text-slate-400">
-                            drew 5 tickets
+                            drew {{ prize.claimed }} tickets
                         </span>
                     </div>
                     <div class="flex flex-wrap items-center gap-1.5 mt-1">
-                        {% for prize_won in prize.prizes_won %}
                         <span class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded">
-                            A
+                            {{ prize.tier }}
                         </span>
-                        {% endfor %}
                     </div>
                 </div>
             </div>

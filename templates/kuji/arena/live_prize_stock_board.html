@@ -14,15 +14,15 @@
             </p>
         </div>
         <div class="text-[11px] font-mono text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 px-2.5 py-1 rounded">
-            LIVE BOX: 10 PRIZES ACTIVE
+            LIVE BOX: {{ summary.stats.total_prizes }} PRIZES ACTIVE
         </div>
     </div>
 
     <!-- Prize Cards List -->
     <div class="space-y-3">
         <!-- Loop through tier list of items -->
-        {% if summary and summary.raffles %}
-        {% for prize in summary.raffles %}
+        {% if summary and summary.prizes %}
+        {% for prize in summary.prizes %}
         <div
             class="relative rounded-xl p-3.5 sm:p-4 border transition-all flex flex-col sm:flex-row items-start sm:items-center-justify-between gap-4 {% if prize.unclaimed_count == 0 %}bg-[#0d121c]/60 border-slate-800/50 opacity-60{% elif prize.tier == 'A' %}bg-[#121929] border-amber-500/40 shadow-lg shadow-amber-500/5{% elif prize.tier == 'C' %}bg-[#101726] border-cyan-500/30{% else %}bg-[#101726] border-slate-800 hover:border-slate-700{% endif %}">
 
@@ -31,8 +31,12 @@
                 <!-- Rank Icon / Thumbnail -->
                 <div
                     class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-slate-900 border border-slate-800 overflow-hidden shrink-0 flex items-center justify-center">
-                    <img src="https://via.placeholder.com/400x176/1a1a1a/666666?text=Prize" alt="Prize"
-                        class="w-full h-full object-cover" />
+                    {% if prize.image_url %}
+                    <img src="{{ prize.image_url }}" alt="Prize" class="w-full h-full object-cover" />
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x176/1a1a1a/666666?text=Prize+{{ prize.tier|upper }}"
+                        alt="Prize" class="w-full h-full object-cover" />
+                    {% endif %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-gift preview-icon w-6 h-6 text-slate-500">
@@ -42,7 +46,7 @@
                         <rect x="3" y="7" width="18" height="4" rx="1" />
                     </svg>
                     <span
-                        class="absolute top-0 left-0 text-[10px] font-extrabold px-1.5 py-0.5 rounded-br {% if prize.tier == 'A' %}bg-amber-500 text-slate-950{% elif prize.tier == 'B' %}bg-slate-700 text-slate-300{% elif prize.tier == 'C' %}bg-cyan-500 text-slate-950{% elif prize.tier == 'D' %}bg-emerald-500 text-slate-950{% elif prize.tier == 'E' %}bg-indigo-500 text-white{% else %}bg-slate-700 text-slate-200{% endif %}">
+                        class="absolute top-0 left-0 text-[10px] font-extrabold px-1.5 py-0.5 rounded-br uppercase {% if prize.tier == 's' or prize.tier == 'ss' %}bg-rose-500 text-slate-300{% elif prize.tier == 'a' %}bg-amber-500 text-slate-950{% elif prize.tier == 'b' %}bg-slate-700 text-slate-300{% elif prize.tier == 'c' %}bg-cyan-500 text-slate-950{% elif prize.tier == 'd' %}bg-emerald-500 text-slate-950{% elif prize.tier == 'e' %}bg-indigo-500 text-white{% else %}bg-slate-700 text-slate-200{% endif %}">
                         {{ prize.tier }}賞
                     </span>
                 </div>
@@ -55,9 +59,9 @@
                             {{ prize.tier }}
                         </span>
 
-                        {% if prize.unclaimed_count > 0 %}
+                        {% if prize.unclaimed > 0 %}
                         <span class="text-[10px] font-mono font-bold uppercase text-cyan-300">
-                            Odds: 1 in {{ prize.unclaimed_count }}
+                            Odds: 1 in {{ prize.unclaimed }}
                         </span>
                         {% else %}
                         <span
@@ -65,11 +69,8 @@
                             SOLD OUT (完売)
                         </span>
                         {% endif %}
-
-
                         <h4 class="text-xs sm:text-sm font-semibold text-white truncate">{{ prize.name }}</h4>
-                        <!-- Add description if available -->
-                        <p class="text-xs text-slate-400 mt-1">Description will be added here</p>
+                        <p class="text-xs text-slate-400 mt-1">{{ prize.description }}</p>
                     </div>
                 </div>
             </div>
@@ -77,11 +78,11 @@
             <!-- Right: Remaining Count Pill -->
             <div class="shrink-0 self-end sm:self-center">
                 <div
-                    class="px-3 py-1.5 rounded-lg font-mono text-xs font-bold border flex items-center gap-1.5 {% if prize.unclaimed_count == 0 %}bg-slate-900 border-slate-800 text-slate-500{% elif prize.tier == 'A' %}bg-amber-500/10 border-amber-500/40 text-amber-300{% elif prize.tier == 'C' %}bg-cyan-500/10 border-cyan-500/40 text-cyan-300{% else %}bg-slate-900 border-slate-800 text-slate-300{% endif %}">
-                    {% if prize.unclaimed_count > 0 %}
+                    class="px-3 py-1.5 rounded-lg font-mono text-xs font-bold border flex items-center gap-1.5 {% if prize.unclaimed == 0 %}bg-slate-900 border-slate-800 text-slate-500{% elif prize.tier == 'a' %}bg-amber-500/10 border-amber-500/40 text-amber-300{% elif prize.tier == 'c' %}bg-cyan-500/10 border-cyan-500/40 text-cyan-300{% else %}bg-slate-900 border-slate-800 text-slate-300{% endif %}">
+                    {% if prize.unclaimed > 0 %}
                     <span class="w-1.5 h-1.5 rounded full bg-amber-400"></span>
                     {% endif %}
-                    <span>{{ prize.unclaimed_count }} / {{ prize.total_count }}</span>
+                    <span>{{ prize.unclaimed }} / {{ prize.starting_inventory }}</span>
                     <span class="text-[10px] uppercase font-mono text-slate-400">remaining</span>
                 </div>
             </div>

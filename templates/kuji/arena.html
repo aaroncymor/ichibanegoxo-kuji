@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="w-full pb-16 pt-2">
+<div class="w-full pb-16 pt-2" hx-ws:connect="/ws/kuji-session/{{ summary.id }}/">
     <div class="max-w-[1520px] mx-auto px-4 lg:px-6">
         <!-- Subheader & Live Spectator Bar -->
         <div class="flex flex-wrap items-center justify-between gap-3 text-xs border-b border-slate-800/80 pb-3 mb-5">
