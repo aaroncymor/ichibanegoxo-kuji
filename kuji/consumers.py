@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .models import KujiSession
-from .services import draw_raffles, claim_raffles, summarize_kuji_session
+from .services import initialize_draw, claim_prizes, summarize_kuji_session
 
 
 class KujiSessionConsumer(AsyncWebsocketConsumer):
@@ -36,19 +36,19 @@ class KujiSessionConsumer(AsyncWebsocketConsumer):
         kuji_session = await KujiSession.objects.aget(id=self.kuji_session_id)
 
         try:
-            drawn_raffles, drawn_raffle_ids = await sync_to_async(draw_raffles)(kuji_session, draw_count, user_id)
+            drawn_prizes = await sync_to_async(initialize_draw)(kuji_session, draw_count, user_id)
         except ValueError:
             print("ERROR: Not enough unclaimed raffles to draw")
             return
 
-        claimed, error = await sync_to_async(claim_raffles)(kuji_session, drawn_raffle_ids, user_id)
+        claimed, error = await sync_to_async(claim_prizes)(drawn_prizes, user_id)
         if not claimed:
             print("ERROR: Failed to claim raffles", error)
             return
 
         summary = await sync_to_async(summarize_kuji_session)(kuji_session)
 
-        print("DRAWN_RAFFLES", drawn_raffles)
+        print("DRAWN_PRIZES", drawn_prizes)
         print("CLAIMED", claimed)
 
         # Broadcast the message event out to everyone in the group
@@ -58,7 +58,7 @@ class KujiSessionConsumer(AsyncWebsocketConsumer):
                 "type": "broadcast_message",
                 "draw_count": draw_count,
                 "user_id": user_id,
-                "drawn_raffles": drawn_raffles,
+                "drawn_prizes": drawn_prizes,
                 "summary": summary,
                 "error": error
             }
@@ -74,13 +74,13 @@ class KujiSessionConsumer(AsyncWebsocketConsumer):
             raffles_summary_html += f"<li>[{raffle['tier']}] - {raffle['name']} (Unclaimed: {raffle['unclaimed_count']})</li>"
         raffles_summary_html += "</ul>"
         
-        drawn_raffles_html = "<ul id='draw-results' hx-swap-oob='beforeend'>"
-        for raffle in event["drawn_raffles"]:
-            drawn_raffles_html += f"<li>[{raffle['tier']}] - {raffle['name']}</li>"
-        drawn_raffles_html += "</ul>"
+        drawn_prizes_html = "<ul id='draw-results' hx-swap-oob='beforeend'>"
+        for prize in event["drawn_prizes"]:
+            drawn_prizes_html += f"<li>[{prize['tier']}] - {prize['name']}</li>"
+        drawn_prizes_html += "</ul>"
         
         html_payload += raffles_summary_html
-        html_payload += drawn_raffles_html
+        html_payload += drawn_prizes_html
         
         # send raw HTML back out to the browser
         await self.send(text_data=html_payload)

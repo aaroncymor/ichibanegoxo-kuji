@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'theme',
     'channels',
     # custom
+    'users.apps.UsersConfig',
     'kuji.apps.KujiConfig',
 ]
 
@@ -166,3 +167,5 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
+
+AUTH_USER_MODEL = "users.User"
